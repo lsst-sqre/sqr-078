@@ -2,7 +2,8 @@
 
 .. sectnum::
 
-.. TODO: Delete the note below before merging new content to the main branch.
+.. TODO: Delete the note below before merging new content to the main
+   branch.
 
 .. note::
 
@@ -31,12 +32,13 @@ Approaches Considered
 =====================
 
 This is not a new idea; user file access to resources in the RSP has
-been something we've wanted for a long time.
+been something we've wanted for a long time.  There have been at least
+three ideas for how to provide a WebDAV-based user file server.
 
 Nginx Extensions
 ----------------
 
-One approach was started by Brian Van Kleveren several years ago.  His
+One approach was started by Brian Van Klaveren several years ago.  His
 idea was to take the built-in rudimentary WebDAV support in Nginx,
 extend that with https://github.com/arut/nginx-dav-ext-module (which
 adds the rest of the WebDAV verbs, turning it into a complete WebDAV
@@ -108,9 +110,10 @@ This brings us to the approach we chose.  Abstractly, a lightweight
 WebDAV server, running as a particular user, with all of that user's
 permissions, is the correct approach.
 
-As it happens, our `JupyterLab Controller <https://github.com/lsst-sqre/jupyterlab-controller>`__
-(AKA ``nublado``) provides the second half of this.  What it does is to
-spin up a Kubernetes Pod, running as a particular user, which then runs
+As it happens, our `JupyterLab Controller
+<https://github.com/lsst-sqre/jupyterlab-controller>`__ (AKA
+``nublado``) provides the second half of this.  What it does is to spin
+up a Kubernetes Pod, running as a particular user, which then runs
 JupyterLab so the user can work on their own files, and on files shared
 to them through POSIX groups.
 
@@ -139,23 +142,27 @@ files when supplied with a user context.
 
 The Go language turns out to be just about ideal for this.  Go does
 static (or nearly-so) linking.  It also has a perfectly serviceable
-`WebDAV server implementation <https://pkg.go.dev/golang.org/x/net/webdav>`__
-in its standard library.  Two minutes of Googling yielded this simple
-`WebDAV-enabled HTTP server <https://gist.github.com/staaldraad/d835126cd46969330a8fdadba62b9b69>`__
-which the author was kind enough to allow us to reuse under an MIT license.
+`WebDAV server implementation
+<https://pkg.go.dev/golang.org/x/net/webdav>`__ in its standard library.
+Two minutes of Googling yielded this simple `WebDAV-enabled HTTP server
+<https://gist.github.com/staaldraad/d835126cd46969330a8fdadba62b9b69>`__
+which the author was kind enough to allow us to reuse under an MIT
+license.
 
-The resulting code is known as
-`Worblehat <https://github.com/lsst-sqre/worblehat.git>`__ and adds a few
-settings we can tweak, as well as an inactivity timeout shutdown.
+The resulting code is known as `Worblehat
+<https://github.com/lsst-sqre/worblehat.git>`__ and adds a few settings
+we can tweak, as well as an inactivity timeout shutdown.  It is packaged
+as a single-file container: the only thing in it is the Worblehat
+executable.  This presents a minimal attack surface.
 
 That was the easy part.
 
-The slightly harder part was implementing the
-machinery in the JupyterLab Controller to automatically create and tear
-down the resources to make and remove user fileservers on demand.  Even
-this wasn't very tough; most of the effort was spent extending the
-Kubernetes mock API for testing, which then gives us a more complete
-Kubernetes mock going forward.
+The slightly harder part was implementing the machinery in the
+JupyterLab Controller to automatically create and tear down the
+resources to make and remove user fileservers on demand.  Even this
+wasn't very tough; most of the effort was spent extending the Kubernetes
+mock API for testing, which then gives us a more complete Kubernetes
+mock going forward.
 
 The final missing piece is a set of changes to Phalanx to add the new
 routes and add ClusterRole capabilities for it to be able to manipulate
@@ -164,6 +171,7 @@ the objects that Labs don't use but Fileservers do.
 .. Make in-text citations with: :cite:`bibkey`.
 .. Uncomment to use citations
 .. .. rubric:: References
-.. 
-.. .. bibliography:: local.bib lsstbib/books.bib lsstbib/lsst.bib lsstbib/lsst-dm.bib lsstbib/refs.bib lsstbib/refs_ads.bib
-..    :style: lsst_aa
+..
+.. .. bibliography:: local.bib lsstbib/books.bib lsstbib/lsst.bib
+   lsstbib/lsst-dm.bib lsstbib/refs.bib lsstbib/refs_ads.bib
+..  :style: lsst_aa
