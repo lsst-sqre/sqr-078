@@ -122,6 +122,34 @@ The final missing piece was a set of changes to `Phalanx
 ClusterRole capabilities for the controller to be able to manipulate the
 objects that Labs don't use but Fileservers do.
 
+Controller Routes
+=================
+
+The user fileserver adds three routes to the controller.
+
+``GET /files``
+    Creates fileserver objects for user if necessary and returns usage
+    text.  That text instructs a user how to acquire a token for the
+    fileserver and tells the user to direct a WebDAV client with that
+    token to ``files/<username>``.
+
+  Credential scopes required: ``exec:notebook``
+
+``GET /nublado/fileserver/v1/users``
+    Returns a list of all users with running fileservers.
+    Example:
+
+    .. code-block:: json
+
+       [ "adam", "rra" ]
+
+  Credential scopes required: ``admin:jupyterlab``
+
+``DELETE /nublado/fileserver/v1/<username>``
+    Removes fileserver objects (if any) for the specified user.
+
+  Credential scopes required: ``admin:jupyterlab``
+
 Other Approaches Considered
 ===========================
 
