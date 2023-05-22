@@ -131,7 +131,7 @@ The user fileserver adds three routes to the controller.
     Creates fileserver objects for user if necessary and returns usage
     text.  That text instructs a user how to acquire a token for the
     fileserver and tells the user to direct a WebDAV client with that
-    token to ``files/<username>``.
+    token to ``/files/<username>``.
 
   Credential scopes required: ``exec:notebook``
 
