@@ -1,0 +1,21 @@
+flowchart TD
+  UserBrowser(("""User Browser:
+  START""")) -- GET /files --> CQ
+  subgraph Controller
+    CQ{OK?}
+    CQ -- No --> CC[/Create Fileserver resources/] -- Create --> Fileserver -- Created --> Reply
+    CQ -- Yes --> Reply
+  end
+  Reply[/Reply/] -- Explanatory text --> UserBrowser & UserBrowser2
+  subgraph Fileserver
+    Ingress["Ingress: /files/&lt;user&gt;"] --> Service --> Pod[Fileserver Pod]
+    Pod <-.-> Storage
+  end
+  Gafaelfawr{{Gafaelfawr}}
+  UserBrowser2["""User Browser:
+  Get token"""] --GET /auth/token	--> Gafaelfawr
+  Gafaelfawr -- token --> Headers & UserBrowser2
+  Headers("Headers {Authorization: Bearer &lt;token&gt;}")
+  WebDAV[User WebDAV client] --> Headers --> Ingress
+  Storage[(External Storage)]
+  WebDAV <== files ==> Pod

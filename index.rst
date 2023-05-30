@@ -122,6 +122,9 @@ The final missing piece was a set of changes to `Phalanx
 ClusterRole capabilities for the controller to be able to manipulate the
 objects that Labs don't use but Fileservers do.
 
+.. mermaid:: _static/diagram.mmd
+   :caption: Fileserver lifecycle
+
 Controller Routes
 =================
 
