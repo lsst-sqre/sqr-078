@@ -133,7 +133,7 @@ The user fileserver adds three routes to the controller.
     fileserver and tells the user to direct a WebDAV client with that
     token to ``/files/<username>``.
 
-  Credential scopes required: ``exec:notebook``
+    Credential scopes required: ``exec:notebook``
 
 ``GET /nublado/fileserver/v1/users``
     Returns a list of all users with running fileservers.
@@ -143,12 +143,12 @@ The user fileserver adds three routes to the controller.
 
        [ "adam", "rra" ]
 
-  Credential scopes required: ``admin:jupyterlab``
+    Credential scopes required: ``admin:jupyterlab``
 
 ``DELETE /nublado/fileserver/v1/<username>``
     Removes fileserver objects (if any) for the specified user.
 
-  Credential scopes required: ``admin:jupyterlab``
+    Credential scopes required: ``admin:jupyterlab``
 
 Other Approaches Considered
 ===========================
