@@ -87,9 +87,15 @@ The resulting code is known as `Worblehat
 server, we added a few settings to tweak, including an inactivity
 timeout and a mechanism for realizing shutdown on timeout.  It is
 packaged as a single-file container: the only thing in it is the
-Worblehat executable.  This presents a minimal attack surface.  When it
-has received no file requests for the length of its timeout, the process
-simply exits.
+Worblehat executable, and a mount point (conventionally ``/mnt``) that
+serves as the root of the presented tree.  Any filesystems mounted into
+a user lab are mounted into the fileserver, but with ``/mnt`` prepended,
+so that the fileserver serves only a single collection.
+
+This presents a minimal attack surface.  When the fileserver has
+received no file requests (technically, no requests with methods other
+than ``PROPFIND``) for the length of its timeout, the process simply
+exits.
 
 That was the easy part.
 
@@ -106,9 +112,19 @@ Much of that effort went into extending the Kubernetes mock API in `Safir
 <https://github.com/lsst-sqre/safir.git>`__ to support the new objects
 and methods that the fileserver needs.  This cascaded into an effort to
 replace all the polling loops in the controller with event watches and
-to streamline the event watch structure.  We use that watch to determine
-when the fileserver process exits (the Pod moves to a terminal state),
-and trigger cleanup based on that event.
+to streamline the event watch structure.
+
+The controller uses that watch to determine when the fileserver process
+has exited (the Pod moves to a terminal state), and triggers cleanup of
+all the fileserver objects based on that event.  That is effectively
+instantaneous when the Pod shuts down.  Specifically, the window when
+there still exists a valid ingress for the fileserver while the
+Worblehat pod is not running is very small.  Once the fileserver ingress
+is gone, the user WebDAV client may be ill-behaved and keep hammering
+the top-level ``/files`` ingress (which will catch
+``/files/<user-without-fileserver``) but in practice it is unlikely to
+cause issues, since replying with a ``405 Method Not Allowed`` is very
+cheap.
 
 The final missing piece was a set of changes to `Phalanx
 <https://github.com/lsst-sqre/phalanx>`__ to add the new routes and add
@@ -147,14 +163,26 @@ The user fileserver adds three routes to the controller.
 Fileserver Information Flow
 ===========================
 
+User Requests Fileserver
+------------------------
+
 .. figure:: /_static/acquire-fileserver.png
    :name: Acquire user fileserver
+
+User Requests Fileserver Token
+------------------------------
 
 .. figure:: /_static/acquire-token.png
    :name: Acquire fileserver token
 
+User Manipulates Files via Fileserver
+-------------------------------------
+
 .. figure:: /_static/file-transfer.png
    :name: Manipulate files
+
+Fileserver Shuts Down After Timeout
+-----------------------------------
 
 .. figure:: /_static/delete-fileserver.png
    :name: Fileserver deletion on timeout
