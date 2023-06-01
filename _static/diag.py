@@ -31,7 +31,7 @@ with Diagram(
     "Acquire Fileserver",
     show=False,
     filename="acquire-fileserver",
-    outformat="svg",
+    outformat="png",
     graph_attr=graph_attr,
     node_attr=node_attr,
     edge_attr=edge_attr    
@@ -44,14 +44,14 @@ with Diagram(
         ok >> Edge(label="Yes") >> complete
         ok >> Edge(label="No") >> Action("Create Fileserver") >> complete
     user >> Edge(label="Acquire Fileserver") >> browser
-    browser >> Edge(label="GET /files")
+    browser >> Edge(label="GET /files") >> ok
     complete >> Edge(label="text response") >> browser
 
 with Diagram(
     "Acquire Fileserver Token",
     show=False,
     filename="acquire-token",
-    outformat="svg",
+    outformat="png",
     graph_attr=graph_attr,
     node_attr=node_attr,
     edge_attr=edge_attr    
@@ -68,7 +68,7 @@ with Diagram(
     "File Transfer",
     show=False,
     filename="file-transfer",
-    outformat="svg",
+    outformat="png",
     graph_attr=graph_attr,
     node_attr=node_attr,
     edge_attr=edge_attr
@@ -94,7 +94,7 @@ with Diagram(
     "Delete Fileserver",
     show=False,
     filename="delete-fileserver",
-    outformat="svg",
+    outformat="png",
     graph_attr=graph_attr,
     node_attr=node_attr,
     edge_attr=edge_attr

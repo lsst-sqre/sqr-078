@@ -147,16 +147,16 @@ The user fileserver adds three routes to the controller.
 Fileserver Information Flow
 ===========================
 
-.. figure:: /_static/acquire-fileserver.svg
+.. figure:: /_static/acquire-fileserver.png
    :name: Acquire user fileserver
 
-.. figure:: /_static/acquire-token.svg
+.. figure:: /_static/acquire-token.png
    :name: Acquire fileserver token
 
-.. figure:: /_static/file-transfer.svg
+.. figure:: /_static/file-transfer.png
    :name: Manipulate files
 
-.. figure:: /_static/delete-fileserver.svg
+.. figure:: /_static/delete-fileserver.png
    :name: Fileserver deletion on timeout
 
 
