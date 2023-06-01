@@ -19,7 +19,7 @@ ALLSPHINXOPTS   = -d $(BUILDDIR)/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) .
 # the i18n builder cannot share the environment and doctrees with the others
 I18NSPHINXOPTS  = $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) .
 
-.PHONY: help clean html images epub changes linkcheck refresh-bib _static/delete-fileserver.png _static/file-transfer.png _static/acquire-token.png
+.PHONY: help clean html images epub changes linkcheck refresh-bib _static/delete-fileserver.svg _static/file-transfer.svg _static/acquire-token.svg
 
 help:
 	@echo "Please use \`make <target>' where <target> is one of"
@@ -31,9 +31,9 @@ help:
 clean:
 	rm -rf $(BUILDDIR)/*
 
-images: _static/acquire-fileserver.png _static/delete-fileserver.png _static/file-transfer.png _static/acquire-token.png
+images: _static/acquire-fileserver.svg _static/delete-fileserver.svg _static/file-transfer.svg _static/acquire-token.svg
 
-_static/acquire-fileserver.png:
+_static/acquire-fileserver.svg:
 	python3 _static/diag.py
 
 html: images

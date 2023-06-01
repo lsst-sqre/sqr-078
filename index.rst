@@ -156,7 +156,7 @@ Fileserver Information Flow
 .. figure:: /_static/file-transfer.svg
    :name: Manipulate files
 
-.. figure:: /_static/delete-filesever.svg
+.. figure:: /_static/delete-fileserver.svg
    :name: Fileserver deletion on timeout
 
 
