@@ -2,13 +2,6 @@
 
 .. sectnum::
 
-.. TODO: Delete the note below before merging new content to the main
-   branch.
-
-.. note::
-
-   **This technote is a work-in-progress.**
-
 Abstract
 ========
 
@@ -122,8 +115,6 @@ The final missing piece was a set of changes to `Phalanx
 ClusterRole capabilities for the controller to be able to manipulate the
 objects that Labs don't use but Fileservers do.
 
-.. mermaid:: _static/diagram.mmd
-   :caption: Fileserver lifecycle
 
 Controller Routes
 =================
@@ -152,6 +143,22 @@ The user fileserver adds three routes to the controller.
     Removes fileserver objects (if any) for the specified user.
 
     Credential scopes required: ``admin:jupyterlab``
+
+Fileserver Information Flow
+===========================
+
+.. figure:: /_static/acquire-fileserver.svg
+   :name: Acquire user fileserver
+
+.. figure:: /_static/acquire-token.svg
+   :name: Acquire fileserver token
+
+.. figure:: /_static/file-transfer.svg
+   :name: Manipulate files
+
+.. figure:: /_static/delete-filesever.svg
+   :name: Fileserver deletion on timeout
+
 
 Other Approaches Considered
 ===========================
